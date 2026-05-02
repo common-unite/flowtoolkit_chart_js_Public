@@ -1,0 +1,39 @@
+{
+  "orgName": "FlowToolKit Chart.js - BETA Org",
+  "edition": "Developer",
+  "features": ["enableSetPasswordInApi", "PlatformCache", "ProviderFreePlatformCache"],
+  "settings": {
+    "emailAdministrationSettings": {
+      "enableEnhancedEmailEnabled": true
+    },
+    "lightningExperienceSettings": {
+      "enableS1DesktopEnabled": true
+    },
+    "chatterSettings": {
+      "enableChatter": true
+    },
+    "userManagementSettings": {
+      "enableNewProfileUI": true
+    },
+    "securitySettings": {
+      "enableAdminLoginAsAnyUser": true,
+      "sessionSettings": {
+        "forceRelogin": false
+      }
+    },
+    "experienceBundleSettings": {
+      "enableExperienceBundleMetadata": true
+    },
+    "flowSettings": {
+      "enableFlowPauseEnabled": true
+    }
+  },
+  "objectSettings" : {
+    "contact" :  {
+      "defaultRecordType" :  "default"
+    },
+    "account" :  {
+      "defaultRecordType" :  "default"
+    }
+  }
+}

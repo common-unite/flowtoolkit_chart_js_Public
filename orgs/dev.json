@@ -1,0 +1,59 @@
+{
+  "orgName": "FlowToolKit Chart.js - DEV Org",
+  "edition": "Developer",
+  "adminEmail": "bobby@common-unite.com",
+  "hasSampleData": false,
+  "features": [
+    "PlatformCache",
+    "ProviderFreePlatformCache",
+    "ContactsToMultipleAccounts",
+    "DefaultWorkflowUser",
+    "EnableSetPasswordInApi",
+    "MarketingUser",
+    "Communities"
+  ],
+  "settings": {
+    "lightningExperienceSettings": {
+      "enableS1DesktopEnabled": true
+    },
+    "mobileSettings": {
+      "enableS1EncryptedStoragePref2": false
+    },
+    "chatterSettings": {
+      "enableChatter": true
+    },
+    "apexSettings": {
+      "enableDisableParallelApexTesting": true
+    },
+    "userManagementSettings": {
+      "enableNewProfileUI": true
+    },
+    "securitySettings": {
+      "enableAdminLoginAsAnyUser": true,
+      "sessionSettings": {
+        "forceRelogin": false
+      }
+    },
+    "enhancedNotesSettings": {
+      "enableEnhancedNotes": true
+    },
+    "flowSettings": {
+      "enableFlowPauseEnabled": true
+    },
+    "communitiesSettings": {
+      "enableCommunityWorkspaces": true,
+      "enableNetworksEnabled": true
+    },
+    "experienceBundleSettings": {
+      "enableExperienceBundleMetadata": true
+    }
+  },
+  "objectSettings": {
+    "contact": {
+      "defaultRecordType": "default"
+    },
+    "account": {
+      "defaultRecordType": "default"
+    }
+  }
+}

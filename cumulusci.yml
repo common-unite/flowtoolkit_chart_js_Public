@@ -1,0 +1,88 @@
+minimum_cumulusci_version: '4.0.1'
+project:
+    name: flowtoolkit_chart_js
+    package:
+        name: "Flow Tool Kit: Chart.js"
+        namespace: FlowToolKit
+        api_version: '66.0'
+    dependencies:
+        - github: 'https://github.com/common-unite/Flow_Tool_Kit_Public'
+    git:
+        default_branch: 'master'
+    source_format: sfdx
+
+tasks:
+
+    run_tests:
+        options:
+            required_org_code_coverage_percent: 0
+
+    assign_chart_perm_sets:
+        description: Assigns the FlowToolKit base permission sets needed to use the Chart component in a Flow.
+        class_path: cumulusci.tasks.salesforce.users.permsets.AssignPermissionSets
+        options:
+            # Bare developer names — CCI namespace-resolves against the project's namespace.
+            api_names:
+                - Form_Builder_Admin
+                - Form_Flow_User
+
+    load_chart_dev_data:
+        description: Generates and loads dev test data for the Chart component (Accounts + ~2,000 Opportunities).
+        class_path: cumulusci.tasks.bulkdata.snowfakery.Snowfakery
+        options:
+            recipe: datasets/dev/opportunities.recipe.yml
+            run_until_records_loaded: Opportunity:2000
+
+    # Mirrors public-facing files (cumulusci.yml, sfdx-project.json, orgs/,
+    # README.md, documents/) to the companion public repo so external users
+    # can browse documentation, see releases, and file issues without
+    # access to this private source repo.
+    github_copy_subtree:
+        options:
+            repo_url: "https://github.com/common-unite/flowtoolkit_chart_js_Public"
+            branch: "main"
+            create_release: true
+            release_body: true
+            include: [ "cumulusci.yml","sfdx-project.json","orgs/","README.md","documents/" ]
+
+flows:
+    release_2gp_beta:
+        steps:
+            90:
+                task: github_copy_subtree
+                options:
+                    tag_name: "latest_beta"
+
+
+    release_2gp_production:
+        steps:
+            90:
+                task: github_copy_subtree
+                options:
+                    tag_name: "latest"
+
+    dev_org:
+        steps:
+            10:
+                task: assign_chart_perm_sets
+            11:
+                task: load_chart_dev_data
+
+orgs:
+    scratch:
+        dev:
+            config_file: orgs/dev.json
+            days: 30
+            namespaced: True
+        beta:
+            config_file: orgs/beta.json
+            days: 7
+            namespaced: True
+        release:
+            config_file: orgs/release.json
+            days: 7
+            namespaced: True
+        feature_chart_js_lwc:
+            config_file: orgs/dev.json
+            days: 7
+            namespaced: True

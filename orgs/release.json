@@ -1,0 +1,13 @@
+{
+  "orgName": "FlowToolKit Chart.js - RELEASE Org",
+  "edition": "Enterprise",
+  "features": ["enableSetPasswordInApi", "PlatformCache", "ProviderFreePlatformCache"],
+  "settings": {
+    "emailAdministrationSettings": {
+      "enableEnhancedEmailEnabled": true
+    },
+    "flowSettings": {
+      "enableFlowPauseEnabled": true
+    }
+  }
+}
