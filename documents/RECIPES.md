@@ -2,6 +2,20 @@
 
 Patterns for getting the most out of the Form (Chart) component.
 
+## Top N
+
+Show only the top 10 (or top 5, etc.) records out of a larger collection.
+
+1. In your upstream Get Records, sort by the field you care about — e.g., Accounts by `AnnualRevenue` DESC, or Opportunities by `Amount` DESC.
+2. On the chart's property editor, set **Limit** = 10.
+3. The chart processes only the first 10 records of the (sorted) collection.
+
+The Limit field doesn't filter or paginate — it's a position-based cap, so the upstream sort decides which records "win." Leave the field blank to use the entire collection. Minimum is 1; the property editor refuses lower values.
+
+This is the recommended pattern for "Top N" displays. It works in both detail mode (one bar per record) and aggregate mode (the first N records get aggregated).
+
+---
+
 ## Drilldown
 
 The chart's outputs are designed to feed downstream Screen components. Drop a chart and a datatable side-by-side on the same Screen, bind the datatable's records input to the chart's `activeRecords` output, and you have a working drilldown — the table updates live as the user clicks wedges.

@@ -14,6 +14,7 @@ A Salesforce managed package that brings Chart.js into the Flow runtime as a scr
 - **Aggregate functions** — Count, Sum, Average, Min, Max — or detail mode (one point per record)
 - **Group by anything** — Picklist, Reference, Date, DateTime, Boolean, Text. Reference fields show the related record name; picklists show translated labels; dates render as friendly labels (`Mar 2026`, `Q1 2026`, `Week 18, 2026`).
 - **Click-to-drilldown** — every wedge click emits the underlying records, ready to feed a datatable, navigation, or another chart on the same screen
+- **Top N** — optional Limit input caps the records the chart processes; combine with an upstream Sort for "Top 10 Accounts by Revenue" patterns
 - **Per-grouping color mapping** — point-and-click UI for assigning a color to specific values; admins don't write JSON
 - **Reactive** — the chart re-renders when its inputs change anywhere on the screen
 - **Polished by default** — auto-contrast value labels, locale-aware number/date formatting, responsive layout, accessibility-friendly

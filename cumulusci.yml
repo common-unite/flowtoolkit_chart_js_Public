@@ -67,6 +67,15 @@ flows:
                 task: assign_chart_perm_sets
             11:
                 task: load_chart_dev_data
+            # Test flows for the chart component — Screen Action wiring,
+            # reactive scenarios, etc. Lives in unpackaged/config/dev so it
+            # ships into dev scratch orgs only and never enters the package.
+            12:
+                task: deploy
+                options:
+                    path: unpackaged/config/dev
+                ui_options:
+                    name: "Deploy Dev Test Flows"
 
 orgs:
     scratch:
