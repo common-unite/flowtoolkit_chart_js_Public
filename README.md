@@ -22,7 +22,13 @@ A Salesforce managed package that brings Chart.js into the Flow runtime as a scr
 ## Install
 
 1. Install the [Flow Tool Kit](https://github.com/common-unite/Flow_Tool_Kit_Public) base package.
-2. Install the Chart.js extension via the package install link from your CCI release pipeline (or get it from your Salesforce admin).
+2. Install the latest **Flow Tool Kit: Chart.js** release. The [latest release notes](https://github.com/common-unite/flowtoolkit_chart_js_Public/releases/latest) on GitHub always carry the current install URLs and changelog.
+
+   Direct install links for the current production release (**0.2.0.2**):
+   - **Sandbox / Scratch Orgs:** [test.salesforce.com install link](https://test.salesforce.com/packaging/installPackage.apexp?p0=04tRQ0000009IH3YAM)
+   - **Production / Developer Edition Orgs:** [login.salesforce.com install link](https://login.salesforce.com/packaging/installPackage.apexp?p0=04tRQ0000009IH3YAM)
+
+   The Flow Tool Kit base package is installed automatically as a dependency.
 
 ## Quick start
 
