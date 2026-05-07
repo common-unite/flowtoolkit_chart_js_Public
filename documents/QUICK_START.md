@@ -5,9 +5,9 @@ Build your first chart in under five minutes.
 ## Prerequisites
 
 - The [Flow Tool Kit](https://github.com/common-unite/Flow_Tool_Kit_Public) base package installed in your org (this Chart.js component is an extension package that depends on it).
-- **Flow Tool Kit: Chart.js** installed in your org — see the [latest release](https://github.com/common-unite/flowtoolkit_chart_js_Public/releases/latest) for the most current install URL and changelog. Direct install links for the current production release (**0.3.0.1**):
-  - Sandbox / Scratch: [test.salesforce.com install link](https://test.salesforce.com/packaging/installPackage.apexp?p0=04tRQ0000009KifYAE)
-  - Production / DE: [login.salesforce.com install link](https://login.salesforce.com/packaging/installPackage.apexp?p0=04tRQ0000009KifYAE)
+- **Flow Tool Kit: Chart.js** installed in your org — see the [latest release](https://github.com/common-unite/flowtoolkit_chart_js_Public/releases/latest) for the most current install URL and changelog. Direct install links for the current production release (**0.4.0.1**):
+  - Sandbox / Scratch: [test.salesforce.com install link](https://test.salesforce.com/packaging/installPackage.apexp?p0=04tRQ0000009LbVYAU)
+  - Production / DE: [login.salesforce.com install link](https://login.salesforce.com/packaging/installPackage.apexp?p0=04tRQ0000009LbVYAU)
 - A Flow with a record collection variable (from a Get Records, an SOQL, or an upstream subflow).
 
 ## 1. Drop the component on a screen
