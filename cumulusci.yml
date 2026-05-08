@@ -17,6 +17,9 @@ tasks:
         options:
             required_org_code_coverage_percent: 0
 
+    export_form:
+        class_path: cci_flowtoolkit_tasks.export_form.ExportFormMetadata
+
     assign_chart_perm_sets:
         description: Assigns the FlowToolKit base permission sets needed to use the Chart component in a Flow.
         class_path: cumulusci.tasks.salesforce.users.permsets.AssignPermissionSets
@@ -76,6 +79,12 @@ flows:
                     path: unpackaged/config/dev
                 ui_options:
                     name: "Deploy Dev Test Flows"
+            13:
+                task: deploy
+                options:
+                    path: unpackaged/config/forms/Demo_Opportunities_Table
+                ui_options:
+                    name: "Deploy Demo Opportunities Table form"
 
 orgs:
     scratch:
@@ -89,9 +98,5 @@ orgs:
             namespaced: True
         release:
             config_file: orgs/release.json
-            days: 7
-            namespaced: True
-        feature_chart_js_lwc:
-            config_file: orgs/dev.json
             days: 7
             namespaced: True

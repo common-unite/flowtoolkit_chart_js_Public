@@ -90,6 +90,31 @@ Draws horizontal grid lines at axis ticks.
 
 ---
 
+## View Data
+
+Surface the records behind the chart in an on-demand modal hosted by the FlowToolKit Form Builder data table. Phase 1 is **display-only** — the modal renders the records currently active on the chart at click time (snapshot), with search/filter on. The chart and rest of the screen are non-interactive while the modal is open.
+
+> **Licensing note** — the View Data modal embeds the FlowToolKit data-table component. The chart component itself is free to use, but the **data-table component is subject to paid Flow Tool Kit subscriptions** for most objects. The free Flow Tool Kit tier supports tables on **Account, Contact, Case, and Lead** only. To enable View Data on any other object, your org needs a paid Flow Tool Kit license. Your existing chart will continue to render fine without View Data — this only affects the modal.
+
+![View Data modal demo](screenshots/16-view-data-modal-demo.gif)
+
+| Field | Description |
+|---|---|
+| **Enable View Data** | Toggle that adds a small `utility:table` icon-button to the chart's header (top-right). The button is always visible when this is on; if no Form is configured, it renders disabled with an explanatory tooltip. |
+| **View Data Form** | Picker for the FlowToolKit Form Builder *table* that drives the column layout. The picker is filtered to the chart's auto-detected sObject and only shows Forms whose type is `table` (regular form components are excluded — the modal hosts a data table). |
+
+![View Data CPE demo](screenshots/16-view-data-cpe-demo.gif)
+
+**What admins can rely on**:
+- The modal opens at the largest stock `lightning/modal` size (`large`).
+- The data table receives a deep-cloned snapshot of `activeRecords` (which collapses to selected records when a chart wedge is selected, otherwise visible records).
+- Search/filter is auto-enabled. The action column is hidden — Phase 1 is read-only.
+- Closing the modal (X button, ESC, backdrop click, or "Close / Return") returns focus to the trigger.
+
+**Phase 2 follow-ups** (not in scope today): row selection flowing back as a chart output, write-back collections (insert/update/delete), live updates while the modal is open, admin-tunable button label and modal size.
+
+---
+
 ## Behavior (outputs)
 
 The chart emits a set of output properties on click and on data change. See [Output Properties](OUTPUTS.md) for the full list and binding examples.

@@ -46,4 +46,5 @@ Save the Flow and run it. The chart renders against your live data.
 - Make wedge clicks drive other components — see [Output Properties](OUTPUTS.md) and the [Drilldown recipe](RECIPES.md#drilldown).
 - Customize colors per value — see [Per-grouping colors](RECIPES.md#per-grouping-colors).
 - Build a multi-chart dashboard — see [Multi-chart dashboard](RECIPES.md#multi-chart-dashboard).
+- Let users **inspect the records behind the chart** in a modal — see [View Data](CPE_REFERENCE.md#view-data).
 - For every property editor field, see the [Property Editor Reference](CPE_REFERENCE.md).
