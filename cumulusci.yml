@@ -24,7 +24,7 @@ tasks:
         description: Assigns the FlowToolKit base permission sets needed to use the Chart component in a Flow.
         class_path: cumulusci.tasks.salesforce.users.permsets.AssignPermissionSets
         options:
-            # Bare developer names — CCI namespace-resolves against the project's namespace.
+            # Bare developer names - CCI namespace-resolves against the project's namespace.
             api_names:
                 - Form_Builder_Admin
                 - Form_Flow_User
@@ -35,6 +35,12 @@ tasks:
         options:
             recipe: datasets/dev/opportunities.recipe.yml
             run_until_records_loaded: Opportunity:2000
+
+    load_timeline_dev_data:
+        description: Loads deterministic grant-program Campaigns (relative dates) for the Timeline (Gantt) test flow.
+        class_path: cumulusci.tasks.bulkdata.snowfakery.Snowfakery
+        options:
+            recipe: datasets/dev/timeline_campaigns.recipe.yml
 
     # Mirrors public-facing files (cumulusci.yml, sfdx-project.json, orgs/,
     # README.md, documents/) to the companion public repo so external users
@@ -70,7 +76,9 @@ flows:
                 task: assign_chart_perm_sets
             11:
                 task: load_chart_dev_data
-            # Test flows for the chart component — Screen Action wiring,
+            11.5:
+                task: load_timeline_dev_data
+            # Test flows for the chart component - Screen Action wiring,
             # reactive scenarios, etc. Lives in unpackaged/config/dev so it
             # ships into dev scratch orgs only and never enters the package.
             12:

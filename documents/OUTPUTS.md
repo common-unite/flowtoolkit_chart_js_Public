@@ -1,6 +1,6 @@
 # Output Properties
 
-**This is the heart of the component.** The chart isn't just for display — every click, every data change, and every legend toggle emits a set of outputs that other components on the same Flow Screen can react to. A chart wired up correctly turns into a filter, a navigator, or a master record picker for the rest of the page.
+**This is the heart of the component.** The chart isn't just for display - every click, every data change, and every legend toggle emits a set of outputs that other components on the same Flow Screen can react to. A chart wired up correctly turns into a filter, a navigator, or a master record picker for the rest of the page.
 
 ## The big idea
 
@@ -25,7 +25,7 @@ Think of **Active** as "what the user is looking at right now." On initial load 
 | `selectedRecords` | Record Collection | Records in the clicked element |
 | `selectedRecordIds` | List of Text | Their Ids |
 | `selectedRecordCount` | Integer | How many records are selected |
-| `firstSelectedRecord` | Single record | First record in the selection — for navigating to a single record |
+| `firstSelectedRecord` | Single record | First record in the selection - for navigating to a single record |
 | `firstSelectedRecordId` | Text | Id of the first selected record |
 | `selectedDataSetLabel` | Text | The dataset name like `Sum of Amount` or `Count` |
 | `selectedGroupLabel` | Text | Label of the clicked element like `Closed Won` or `Mar 2026` |
@@ -40,7 +40,7 @@ Think of **Active** as "what the user is looking at right now." On initial load 
 | `visibleRecordIds` | List of Text | Their Ids |
 | `visibleRecordCount` | Integer | How many records are showing |
 
-### Active (3 outputs) — *recommended default*
+### Active (3 outputs) - *recommended default*
 
 | Output | Type | What it carries |
 |---|---|---|
@@ -48,13 +48,27 @@ Think of **Active** as "what the user is looking at right now." On initial load 
 | `activeRecordIds` | List of Text | Their Ids |
 | `activeRecordCount` | Integer | How many active records there are |
 
+### Update (3 outputs + the records round-trip) - *with Record Form on Click*
+
+When [Record Form on Click](CPE_REFERENCE.md#record-form-on-click) is enabled, edits made in the form modal surface here. **The component performs no DML** - your Flow does, exactly like the Form Table and Repeater:
+
+| Output | Type | What it carries |
+|---|---|---|
+| `updateCollection` | Record Collection | Records edited through the modal - deduped by Id, last edit wins |
+| `updateCollectionSize` | Integer | How many edited records |
+| `hasRecordsForUpdate` | Boolean | True when there's something to save |
+
+Wire an **Update Records** element on `updateCollection`, gated by a Decision on `hasRecordsForUpdate` - identical to the table/repeater pattern.
+
+**The `records` round-trip:** `records` is input *and* output. The chart re-emits its working collection (edits included) after every commit - **assign it to the same collection variable you feed in**, and edits survive the user navigating Previous/Next before your Flow saves.
+
 ---
 
 ## Wiring outputs into other components
 
-Drag a **second component** onto the same Flow Screen — typically a datatable, a related list, or another **Form (Chart)** — and bind its input to one of the chart's outputs.
+Drag a **second component** onto the same Flow Screen - typically a datatable, a related list, or another **Form (Chart)** - and bind its input to one of the chart's outputs.
 
-### Example 1 — Chart drives a datatable
+### Example 1 - Chart drives a datatable
 
 A doughnut on the left, a Lightning datatable on the right. The datatable shows records that compose whatever the user is currently looking at:
 
@@ -65,23 +79,23 @@ A doughnut on the left, a Lightning datatable on the right. The datatable shows 
 
 Now the datatable is full on initial render (because Active = Visible), and the moment the user clicks a wedge, it filters to that group's records. Click off the wedge and it goes back to showing everything.
 
-### Example 2 — Chart drives a record form
+### Example 2 - Chart drives a record form
 
 A bar chart of Opportunities by Stage. When the user clicks a bar, you want to display the most-recent Opportunity in that group as a form below the chart. Bind a record form's `recordId` to `{!Form_Chart_1.firstSelectedRecordId}`. (Make sure the upstream Get Records sorts by `LastModifiedDate DESC` so "first" means "most recent.")
 
-### Example 3 — Header that updates with the click
+### Example 3 - Header that updates with the click
 
 A Display Text component above the chart bound to `{!Form_Chart_1.selectedGroupLabel}` and `{!Form_Chart_1.selectedRecordCount}`:
 
-> **You picked {!selectedGroupLabel}** — {!selectedRecordCount} records, {!selectedPercent}% of total.
+> **You picked {!selectedGroupLabel}** - {!selectedRecordCount} records, {!selectedPercent}% of total.
 
-### Example 4 — Chart drives another chart
+### Example 4 - Chart drives another chart
 
-Two charts on the same screen — a high-level summary (e.g., Sum of Amount by Stage) and a detail breakdown (e.g., Sum of Amount by Owner). Bind the second chart's `Source Records` input to `{!Form_Chart_1.activeRecords}`. The detail chart now drills automatically when the user clicks a stage in the summary.
+Two charts on the same screen - a high-level summary (e.g., Sum of Amount by Stage) and a detail breakdown (e.g., Sum of Amount by Owner). Bind the second chart's `Source Records` input to `{!Form_Chart_1.activeRecords}`. The detail chart now drills automatically when the user clicks a stage in the summary.
 
 ---
 
-## Pass data IN — try the screen action / reactive pattern
+## Pass data IN - try the screen action / reactive pattern
 
 The chart is a **reactive** Screen component. Inputs read from Flow variables update the chart live without leaving the screen. This is the same magic that powers screen-action and reactive-component features on Flow Screens.
 
@@ -92,4 +106,4 @@ A few patterns worth experimenting with:
 - **Toggle the Group By field with reactive binding.** A choice of "By Stage / By Owner / By Industry" can drive `Group By Field` directly. The chart pivots without a screen reload.
 - **Date filter pipes into the chart.** A date input bound to a screen variable, that variable feeding a downstream Get Records, that Get Records' output feeding the chart. The whole chain re-runs on every date change.
 
-This kind of in-place reactivity is one of the most powerful (and underused) parts of Flow Screens — and the chart was designed for it. Try wiring a small filter UI above the chart on your first project; it lifts the chart from a static visualization to a live exploration tool.
+This kind of in-place reactivity is one of the most powerful (and underused) parts of Flow Screens - and the chart was designed for it. Try wiring a small filter UI above the chart on your first project; it lifts the chart from a static visualization to a live exploration tool.

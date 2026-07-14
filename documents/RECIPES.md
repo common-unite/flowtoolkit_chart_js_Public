@@ -6,11 +6,11 @@ Patterns for getting the most out of the Form (Chart) component.
 
 Show only the top 10 (or top 5, etc.) records out of a larger collection.
 
-1. In your upstream Get Records, sort by the field you care about — e.g., Accounts by `AnnualRevenue` DESC, or Opportunities by `Amount` DESC.
+1. In your upstream Get Records, sort by the field you care about - e.g., Accounts by `AnnualRevenue` DESC, or Opportunities by `Amount` DESC.
 2. On the chart's property editor, set **Limit** = 10.
 3. The chart processes only the first 10 records of the (sorted) collection.
 
-The Limit field doesn't filter or paginate — it's a position-based cap, so the upstream sort decides which records "win." Leave the field blank to use the entire collection. Minimum is 1; the property editor refuses lower values.
+The Limit field doesn't filter or paginate - it's a position-based cap, so the upstream sort decides which records "win." Leave the field blank to use the entire collection. Minimum is 1; the property editor refuses lower values.
 
 This is the recommended pattern for "Top N" displays. It works in both detail mode (one bar per record) and aggregate mode (the first N records get aggregated).
 
@@ -18,14 +18,14 @@ This is the recommended pattern for "Top N" displays. It works in both detail mo
 
 ## Drilldown
 
-The chart's outputs are designed to feed downstream Screen components. Drop a chart and a datatable side-by-side on the same Screen, bind the datatable's records input to the chart's `activeRecords` output, and you have a working drilldown — the table updates live as the user clicks wedges.
+The chart's outputs are designed to feed downstream Screen components. Drop a chart and a datatable side-by-side on the same Screen, bind the datatable's records input to the chart's `activeRecords` output, and you have a working drilldown - the table updates live as the user clicks wedges.
 
 | Where | Bind to |
 |---|---|
 | Datatable `tableData` | `{!Form_Chart_1.activeRecords}` |
 | Datatable `keyField` | `Id` |
 
-`activeRecords` is the right output for this — it shows visible records on initial load and swaps to selected records once the user clicks a wedge. See [Output Properties](OUTPUTS.md) for the full list.
+`activeRecords` is the right output for this - it shows visible records on initial load and swaps to selected records once the user clicks a wedge. See [Output Properties](OUTPUTS.md) for the full list.
 
 ![Doughnut with a wedge selected](screenshots/chart-doughnut-selected.png)
 
@@ -39,10 +39,10 @@ Drop multiple **Form (Chart)** components on the same Screen, all reading from t
 
 The example above shows four charts off the same Opportunities collection:
 
-- **Doughnut** — Sum of Amount by Stage (with center total)
-- **Pie** — Count by Closed (Boolean — Yes / No)
-- **Area** — Sum of Amount by Close Date (Year)
-- **Horizontal Bar** — Avg of Amount by Stage
+- **Doughnut** - Sum of Amount by Stage (with center total)
+- **Pie** - Count by Closed (Boolean - Yes / No)
+- **Area** - Sum of Amount by Close Date (Year)
+- **Horizontal Bar** - Avg of Amount by Stage
 
 Tip: chain them. Click a wedge in the doughnut to filter what the bar chart shows by binding the bar's `Source Records` to the doughnut's `activeRecords`.
 
@@ -50,17 +50,17 @@ Tip: chain them. Click a wedge in the doughnut to filter what the bar chart show
 
 ## Per-grouping colors
 
-When the chart is grouped by a field where specific values map to specific brand colors (e.g., Stage = Closed Won is green, Closed Lost is red), use **Color Mode → Per Grouping**. The mapping UI is point-and-click — no JSON.
+When the chart is grouped by a field where specific values map to specific brand colors (e.g., Stage = Closed Won is green, Closed Lost is red), use **Color Mode → Per Grouping**. The mapping UI is point-and-click - no JSON.
 
 ![Per-grouping color mappings in the property editor](screenshots/chart-cpe-colors-per-grouping.png)
 
-Picklist Group By fields get a combobox of picklist labels — once a value is mapped in one row, it's removed from the other rows' option lists. For other field types (Reference, Date, String, Boolean), type the display label exactly as it appears on the chart axis. Unmapped values fall back to the **Default Color**.
+Picklist Group By fields get a combobox of picklist labels - once a value is mapped in one row, it's removed from the other rows' option lists. For other field types (Reference, Date, String, Boolean), type the display label exactly as it appears on the chart axis. Unmapped values fall back to the **Default Color**.
 
 ---
 
 ## Date bucket comparison
 
-Build three charts on the same Screen, all grouped by the same Date field, with different **Date Bucket** settings — Year, Quarter, and Month. Same data, three time-grain views.
+Build three charts on the same Screen, all grouped by the same Date field, with different **Date Bucket** settings - Year, Quarter, and Month. Same data, three time-grain views.
 
 ![Bar by year](screenshots/chart-bar-by-year.png)
 
@@ -72,7 +72,7 @@ Date bucket labels render as friendly formats (`2026`, `Q1 2026`, `Mar 2026`, `W
 
 ## Boolean Yes / No
 
-Group a chart by a Boolean field (e.g., `IsClosed`, `IsDeleted`) and the bars / slices automatically render with **Yes** and **No** labels. The chart also handles Salesforce's quirk where false-valued Boolean fields can be omitted from record JSON — those records are correctly counted under No instead of falling into a `(No value)` bucket.
+Group a chart by a Boolean field (e.g., `IsClosed`, `IsDeleted`) and the bars / slices automatically render with **Yes** and **No** labels. The chart also handles Salesforce's quirk where false-valued Boolean fields can be omitted from record JSON - those records are correctly counted under No instead of falling into a `(No value)` bucket.
 
 ![Pie chart grouped by Closed Boolean field](screenshots/chart-pie-boolean.png)
 
@@ -85,3 +85,41 @@ For long category labels (Account names, picklist values with long display label
 ![Horizontal bar with hover tooltip](screenshots/chart-bar-horizontal-tooltip.png)
 
 The tooltip on hover shows the full data point even when the value labels would otherwise truncate.
+
+---
+
+## Grant deliverables timeline (Gantt)
+
+The grantmaking layout: one row per Funding Request, its Requirements as due-date diamonds color-coded by type, descriptions on hover.
+
+1. **Get Records** - Requirements with Due Date, Type, Description, and the Funding Request lookup. Sort by Due Date.
+2. Chart: **Timeline (Gantt)**, Group By = the Funding Request lookup, Milestone Date = Due Date, Color By = Type, Tooltip Fields = `Description`.
+3. Appearance → Colors → Per Grouping to pin type colors (e.g., Interim orange, Final red).
+
+For exact grant-period bars behind the diamonds, add formula fields on the child that copy the parent's start/end dates and map them as Start/End Date Fields. Full guide, data-shape outline, and mode reference: [Timeline (Gantt)](TIMELINE_GANTT.md).
+
+---
+
+## Tag-filtered timeline
+
+Let users filter the timeline by a tag picklist on the parent record - no chart configuration involved:
+
+1. Add a **Choice picklist** screen component with the tag values.
+2. Add a **Collection Filter** upstream of the chart: tag equals the choice. Multi-select picklist tags store as `A;B;C` - use a *contains* condition.
+3. Point the chart's **Source Records** at the filtered collection.
+
+The chart re-renders reactively as the user changes the picklist - same pattern as any reactive collection, and it composes with every other recipe on this page.
+
+---
+
+## Click a record, edit it in a modal
+
+With [Record Form on Click](CPE_REFERENCE.md#record-form-on-click) enabled, any single-record chart element (milestone diamond, row-per-record bar, detail-mode element) opens a FlowToolKit Form modal on click. To wire the save:
+
+1. On the chart: toggle **Record Form on Click** on, then pick a Form (or a form-name field, or build a custom JSON form).
+2. **Assign the chart's `records` output back to the same collection variable you feed in** - this keeps edits alive if the user navigates Previous/Next before saving.
+3. After the screen: a **Decision** on `{!Form_Chart_1.hasRecordsForUpdate}` → **Update Records** on `{!Form_Chart_1.updateCollection}`.
+
+The chart re-renders immediately on Save (the bar moves, the color changes) while the actual DML waits for your Flow - the same contract as the Form Table and Repeater.
+
+**Per-record forms:** in **Record Field** mode, a formula field on the record supplies the Form's qualified API name - e.g., budget Requirements open the budget form, narrative Requirements the narrative form, from one chart with zero Flow logic.
