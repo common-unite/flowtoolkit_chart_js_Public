@@ -11,11 +11,86 @@ project:
         default_branch: 'master'
     source_format: sfdx
 
+plans:
+    # MetaDeploy plans. Frozen steps carry options, checks and ui_options only, so
+    # ignore_failure never reaches the worker: every step must succeed on its own.
+    # Gates sit on task steps because checks on a flow step are dropped at freeze time.
+    install:
+        slug: install
+        title: Install Flow Tool Kit - Form (Chart)
+        tier: primary
+        preflight_message: "Installs the Chart.js screen component together with the Flow Tool Kit base package it depends on. After the install you drag the Form (Chart) component onto any Flow Screen and configure it from the property editor - no code."
+        post_install_message: "Flow Tool Kit: Chart.js is installed. Assign the Form Flow User permission set to everyone who will run flows containing a chart, and Form Builder Admin to everyone who will build them - both ship with the Flow Tool Kit base package. Start with the Quick Start at https://github.com/common-unite/flowtoolkit_chart_js_Public/blob/main/documents/QUICK_START.md, the property editor reference at https://github.com/common-unite/flowtoolkit_chart_js_Public/blob/main/documents/CPE_REFERENCE.md and the Timeline (Gantt) guide at https://github.com/common-unite/flowtoolkit_chart_js_Public/blob/main/documents/TIMELINE_GANTT.md. Full documentation is at https://common-unite.gitbook.io/flow-tool-kit."
+        checks:
+            - when: "not tasks.check_lws_enabled()['is_enabled']"
+              action: error
+              message: "Lightning Web Security (LWS) must be enabled. Go to Setup > Session Settings and enable 'Use Lightning Web Security for Lightning web components'. Without LWS, Lightning Locker proxies every record in the chart's collection and rendering slows down sharply on larger datasets."
+            - when: "not tasks.check_enhanced_email()['is_enabled']"
+              action: error
+              message: "Enhanced Email must be enabled. Go to Setup > Enhanced Email to enable it. The Flow Tool Kit base package, installed here as a dependency, requires it."
+            - when: "tasks.check_chart_js_installed()['is_installed']"
+              action: warn
+              message: "Flow Tool Kit: Chart.js is already installed in this org. To move to a newer version, use the Upgrade plan instead."
+        steps:
+            1:
+                flow: dependencies
+                ui_options:
+                    description: "Installs the Flow Tool Kit base package at the version this release was built against. It supplies the shared property-editor framework and the reactive plumbing the chart component runs on. Skipped if the org already has that version."
+            2:
+                task: install_managed
+                ui_options:
+                    description: "Installs the Flow Tool Kit: Chart.js managed package: the Form (Chart) Flow Screen component, its custom property editor and the bundled Chart.js library. Skipped automatically if this exact version is already installed."
+            3:
+                task: update_admin_profile
+                ui_options:
+                    description: "Grants the System Administrator profile access to the Chart.js Apex classes, pages and static resources so admins can configure charts right after install. Safe to re-run."
+
+    upgrade:
+        slug: upgrade
+        title: Upgrade Flow Tool Kit - Form (Chart)
+        tier: additional
+        preflight_message: "Upgrades Flow Tool Kit: Chart.js and the Flow Tool Kit base package to the latest version. Charts already configured in your flows keep their settings."
+        post_install_message: "Flow Tool Kit: Chart.js is upgraded. Charts already configured in your flows were not changed. Release notes for every version are at https://github.com/common-unite/flowtoolkit_chart_js_Public/releases, and full documentation is at https://common-unite.gitbook.io/flow-tool-kit."
+        checks:
+            - when: "not tasks.check_chart_js_installed()['is_installed']"
+              action: error
+              message: "Flow Tool Kit: Chart.js is not installed in this org yet. Run the Install plan instead."
+            - when: "not tasks.check_lws_enabled()['is_enabled']"
+              action: error
+              message: "Lightning Web Security (LWS) must be enabled. Go to Setup > Session Settings and enable 'Use Lightning Web Security for Lightning web components'."
+        steps:
+            1:
+                task: update_dependencies
+                ui_options:
+                    description: "Upgrades the Flow Tool Kit base package to the version this release was built against, where the org is behind."
+            2:
+                task: install_managed
+                ui_options:
+                    description: "Upgrades the Flow Tool Kit: Chart.js managed package. Skipped automatically if this exact version is already installed."
+            3:
+                task: update_admin_profile
+                ui_options:
+                    description: "Grants the System Administrator profile access to anything new in this version. Safe to re-run."
+
 tasks:
 
     run_tests:
         options:
             required_org_code_coverage_percent: 0
+
+    check_lws_enabled:
+        class_path: tasks.check_lws_enabled.CheckLWSEnabled
+        description: Preflight - is Lightning Web Security enabled?
+
+    check_enhanced_email:
+        class_path: tasks.check_enhanced_email.CheckEnhancedEmailEnabled
+        description: Preflight - is Enhanced Email enabled?
+
+    check_chart_js_installed:
+        class_path: tasks.check_package_installed.CheckPackageInstalled
+        description: Preflight - is Chart.js already installed? Queried by package name because the package shares the FlowToolKit namespace with the base.
+        options:
+            package_name: "Flow Tool Kit: Chart.js"
 
     export_form:
         class_path: cci_flowtoolkit_tasks.export_form.ExportFormMetadata
@@ -52,7 +127,7 @@ tasks:
             branch: "main"
             create_release: true
             release_body: true
-            include: [ "cumulusci.yml","sfdx-project.json","orgs/","README.md","documents/" ]
+            include: [ "cumulusci.yml","sfdx-project.json","orgs/","README.md","documents/","tasks/" ]
 
 flows:
     release_2gp_beta:
